@@ -9,7 +9,6 @@ const CitizenServices = () => {
     { name: 'Housing Support', description: 'Affordable housing and property management' },
     { name: 'Public Transport', description: 'Bus, train, and other public transportation services' },
   ];
-
   return (
     <Box mt={5}>
       <Typography variant="h4" gutterBottom>Citizen Services</Typography>

@@ -10,10 +10,14 @@ import NewsEvents from './components/NewsEvents';
 import CitizenServices from './components/CitizenServes';
 import ContactUs from './components/ContactUs';
 import Login from './components/Login';
-import Gallery from './components/Gallary';
-import Videos from './components/vidoes';
+import Gallary from './components/Gallary';
+import Videos from './components/Videos';
 import Health from './components/Health';
 import Admin from './components/Admin';
+import Education from './components/Education';
+import Transportation from './components/Transportation';
+import PublicWorks from './components/PublicWorks';
+import Finance from './components/Finance';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('token'));
@@ -55,9 +59,14 @@ function App() {
               <Route path="/citizen-services" element={<CitizenServices />} />
               <Route path="/contact-us" element={<ContactUs />} />
               <Route path="/login" element={<Login onLogin={handleLogin} />} />
-              <Route path="/Gallery" element={<Gallery />} />
+              <Route path="/gallery" element={<Gallary />} />
               <Route path="/videos" element={<Videos />} />
               <Route path="/departments/health" element={<Health />} />
+              <Route path="/departments/education" element={<Education />} />
+              <Route path="/departments/transportation" element={<Transportation />} />
+              <Route path="/departments/PublicWorks" element={<PublicWorks />} />
+              <Route path="/departments/finance" element={<Finance />} />
+              
               <Route path="/admin" element={isAuthenticated && role === 'Admin' ? <Admin /> : <h2>Access Denied</h2>} />
             </Routes>
           </Box>

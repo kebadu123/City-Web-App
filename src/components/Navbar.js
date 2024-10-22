@@ -15,7 +15,7 @@ const Navbar = ({ isAuthenticated, role, onLogout }) => {
   const departments = [
     { name: 'Health', description: 'City Health Services' },
     { name: 'Education', description: 'City Education Department' },
-    { name: 'Public Works', description: 'City Public Works Department' },
+    { name: 'PublicWorks', description: 'City Public Works Department' },
     { name: 'Transportation', description: 'City Transportation Services' },
     { name: 'Finance', description: 'City Finance and Taxation Department' },
   ];
@@ -33,9 +33,9 @@ const Navbar = ({ isAuthenticated, role, onLogout }) => {
       <AppBar position="fixed">
         <Toolbar>
           <img
-            src="/Desktop/kb.JPG" // Replace with your logo path
+            src="/images/123.webp" // Replace with your logo path
             alt="Dessie City Logo"
-            style={{ height: '50px', marginRight: '20px' }}
+            style={{ height: '70px', marginRight: '30px' }}
           />
           <Typography variant="h6" sx={{ flexGrow: 1 }}>
             Dessie City Administration
@@ -73,7 +73,7 @@ const Navbar = ({ isAuthenticated, role, onLogout }) => {
           ) : (
             <>
               {role === 'Admin' && (
-                <Button component={Link} to="/admin" color="inherit">Admin</Button>
+                <Button component={Link} to="/admin" color="inherit">Post News</Button>
               )}
               <Button onClick={onLogout} color="inherit">Logout</Button>
             </>

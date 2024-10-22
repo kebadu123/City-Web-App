@@ -1,72 +1,87 @@
-import React, { useState } from 'react';
-import { AppBar, Toolbar, Button, Menu, MenuItem, Typography, Box, Card, CardContent, Grid } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Button, Menu, MenuItem, Box, Card, CardContent, Grid, Typography } from '@mui/material';
+import axios from 'axios';
 
 const Departments = () => {
   const [anchorEl, setAnchorEl] = useState(null);
-  const [showDepartments, setShowDepartments] = useState(false);
+  const [departmentNews, setDepartmentNews] = useState([]);
+  const [selectedDepartment, setSelectedDepartment] = useState('');
 
-  // List of Departments
   const departments = [
     { name: 'Health', description: 'City Health Services' },
     { name: 'Education', description: 'City Education Department' },
-    { name: 'Public Works', description: 'City Public Works Department' },
+    { name: 'PublicWorks', description: 'City Public Works Department' },
     { name: 'Transportation', description: 'City Transportation Services' },
     { name: 'Finance', description: 'City Finance and Taxation Department' },
   ];
 
-  // Handle opening dropdown
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-    setShowDepartments(true);
+  useEffect(() => {
+    if (selectedDepartment) {
+      fetchNewsByDepartment(selectedDepartment);
+    }
+  }, [selectedDepartment]);
+
+  const fetchNewsByDepartment = async (department) => {
+    try {
+      const response = await axios.get(`http://localhost:5000/api/news/${department}`);
+      setDepartmentNews(response.data);
+    } catch (error) {
+      console.error('Error fetching department news', error);
+    }
   };
 
-  // Handle closing dropdown
-  const handleClose = () => {
+  const handleDepartmentClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = (department) => {
     setAnchorEl(null);
-    setShowDepartments(false);
+    setSelectedDepartment(department);
   };
 
   return (
-    <Box>
-      <AppBar position="static">
-        <Toolbar>
-          {/* Departments Dropdown */}
-          <Button
-            aria-controls="departments-menu"
-            aria-haspopup="true"
-            onClick={handleClick}
-            color="inherit"
-          >
-            Departments
-          </Button>
+    <div>
+      {/* Department Menu */}
+      <Button
+        color="primary"
+        onClick={handleDepartmentClick}
+        style={{ margin: '16px' }}
+      >
+        Departments
+      </Button>
 
-          {/* Dropdown Menu */}
-          <Menu
-            id="departments-menu"
-            anchorEl={anchorEl}
-            open={Boolean(anchorEl)}
-            onClose={handleClose}
-          >
-            {departments.map((dept, index) => (
-              <MenuItem key={index} onClick={handleClose}>
-                {dept.name}
-              </MenuItem>
-            ))}
-          </Menu>
-        </Toolbar>
-      </AppBar>
+      {/* Dropdown Menu for Departments */}
+      <Menu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={() => setAnchorEl(null)}
+      >
+        {departments.map((dept, index) => (
+          <MenuItem key={index} onClick={() => handleMenuClose(dept.name)}>
+            {dept.name}
+          </MenuItem>
+        ))}
+      </Menu>
 
-      {/* Show Departments List */}
-      {showDepartments && (
-        <Box mt={5}>
-          <Typography variant="h4" gutterBottom>City Departments</Typography>
-          <Grid container spacing={3}>
-            {departments.map((dept, index) => (
-              <Grid item xs={12} md={6} lg={4} key={index}>
+      {/* Display News for Selected Department */}
+      {selectedDepartment && (
+        <Box mt={2}>
+          <Typography variant="h5" gutterBottom>
+            {selectedDepartment} Department News
+          </Typography>
+
+          <Grid container spacing={2}>
+            {departmentNews.map((news, index) => (
+              <Grid item xs={12} sm={6} md={4} key={index}>
                 <Card>
                   <CardContent>
-                    <Typography variant="h6">{dept.name}</Typography>
-                    <Typography variant="body2">{dept.description}</Typography>
+                    <Typography variant="body1">{news.content}</Typography>
+                    {news.image && (
+                      <img src={`http://localhost:5000/${news.image}`} alt="news" style={{ width: '100%' }} />
+                    )}
+                    {news.video && (
+                      <video controls src={`http://localhost:5000/${news.video}`} style={{ width: '100%' }} />
+                    )}
                   </CardContent>
                 </Card>
               </Grid>
@@ -74,7 +89,7 @@ const Departments = () => {
           </Grid>
         </Box>
       )}
-    </Box>
+    </div>
   );
 };
 
